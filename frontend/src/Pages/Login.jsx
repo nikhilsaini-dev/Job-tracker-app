@@ -25,10 +25,10 @@ export default function Login() {
       const data = await res.json();
 
       if (res.ok) {
-        // ✅ Save token
+        //  Save token
         localStorage.setItem("token", data.token);
 
-        // ✅ Save user info
+        // Save user info
         localStorage.setItem("userName", data.user.name );
         localStorage.setItem("userEmail", data.user.email );
 
@@ -83,7 +83,7 @@ export default function Login() {
         className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md"
       >
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
-          {!showForgot ? "Welcome Back" : "Forgot Password"}
+          {!showForgot ? "Login" : "Forgot Password"}
         </h2>
 
         {!showForgot ? (
