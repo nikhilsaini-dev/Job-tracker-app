@@ -47,7 +47,7 @@ export default function Dashboard() {
     try {
       let res, data;
       if (editJobId) {
-   res = await fetch(`https://job-tracker-app-wrwz.onrender.com/${editJobId}`, {
+   res = await fetch(`https://job-tracker-app-wrwz.onrender.com/api/jobs/${editJobId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -89,7 +89,7 @@ export default function Dashboard() {
   // DELETE JOB 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`https://job-tracker-app-wrwz.onrender.com/${id}`, {
+      const res = await fetch(`https://job-tracker-app-wrwz.onrender.com/api/jobs/${id}`, {
         method: "DELETE",
         headers: { Authorization:` Bearer ${token}`}, // ✅ FIX
       });
