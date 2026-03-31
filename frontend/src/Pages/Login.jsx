@@ -16,7 +16,7 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("https://job-tracker-app-wrwz.onrender.com/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -49,7 +49,7 @@ export default function Login() {
     setLoading(true);
     try {
       const res = await fetch(
-        "http://localhost:5000/api/auth/forgot-password",
+        "https://job-tracker-app-wrwz.onrender.com/api/auth/forgot-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

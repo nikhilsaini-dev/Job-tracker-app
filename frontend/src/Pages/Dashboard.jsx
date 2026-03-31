@@ -27,7 +27,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/jobs", {
+        const res = await fetch("https://job-tracker-app-wrwz.onrender.com", {
           headers: { Authorization: `Bearer ${token}` }, // ✅ FIX
         });
         const data = await res.json();
@@ -47,7 +47,7 @@ export default function Dashboard() {
     try {
       let res, data;
       if (editJobId) {
-   res = await fetch(`http://localhost:5000/api/jobs/${editJobId}`, {
+   res = await fetch(`https://job-tracker-app-wrwz.onrender.com/${editJobId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default function Dashboard() {
 } else {
 
         // ADD
-        res = await fetch("http://localhost:5000/api/jobs", {
+        res = await fetch("https://job-tracker-app-wrwz.onrender.com", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, // ✅ FIX
           body: JSON.stringify(formData),
@@ -89,7 +89,7 @@ export default function Dashboard() {
   // DELETE JOB 
   const handleDelete = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${id}`, {
+      const res = await fetch(`https://job-tracker-app-wrwz.onrender.com/${id}`, {
         method: "DELETE",
         headers: { Authorization:` Bearer ${token}`}, // ✅ FIX
       });
