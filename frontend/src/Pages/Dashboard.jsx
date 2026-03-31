@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenu } from "react-icons/hi"; // hamburger icon
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [jobs, setJobs] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editJobId, setEditJobId] = useState(null);
@@ -165,7 +168,7 @@ export default function Dashboard() {
               <motion.button
                 whileHover={{ scale: 1.05, x: 5 }}
                 className="text-left px-3 py-2 rounded-lg hover:bg-indigo-600/50 transition"
-                onClick={() => { localStorage.removeItem("token"); window.location.href = "/login"; }}
+                onClick={() => { localStorage.removeItem("token"); navigate('/login'); }}
               >
                 Logout
               </motion.button>
