@@ -22,7 +22,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            to="/register"
+            to="/"
             className="bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base px-3 sm:px-4 py-2 rounded-lg font-medium transition shadow hover:shadow-md"
           >
             Register

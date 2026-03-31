@@ -35,4 +35,25 @@ router.delete("/:id", verifyToken, async (req, res) => {
   }
 });
 
+//Put 
+router.put("/:id", verifyToken, async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+    if (!job) return res.status(404).json({ message: "Job not found" });
+
+    if (job.user.toString() !== req.userId)
+      return res.status(401).json({ message: "Unauthorized" });
+
+    job.company = req.body.company;
+    job.role = req.body.role;
+    job.status = req.body.status;
+
+    const updatedJob = await job.save();
+    res.json(updatedJob);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export default router;

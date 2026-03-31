@@ -11,6 +11,11 @@ const ResetPassword = () => {
   const handleReset = async (e) => {
     e.preventDefault();
 
+    if (!password || !confirmPassword) {
+      alert("Please fill all fields!");
+      return;
+    }
+
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
@@ -18,7 +23,7 @@ const ResetPassword = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/api/auth/reset-password/${token}`,
+       ` http://localhost:5000/api/auth/reset-password/${token}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -26,13 +31,13 @@ const ResetPassword = () => {
         }
       );
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({})); // ✅ FIX
 
       if (res.ok) {
         alert("Password reset successful!");
         navigate("/login");
       } else {
-        alert(data.message);
+        alert(data.message || "Reset failed"); // ✅ FIX
       }
     } catch (err) {
       console.error(err);

@@ -22,15 +22,12 @@ export default function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        //  Save token
         localStorage.setItem("token", data.token);
-
-        // Save user info
-        localStorage.setItem("userName", data.user.name );
-        localStorage.setItem("userEmail", data.user.email );
+        localStorage.setItem("userName", data.user?.name || "");
+        localStorage.setItem("userEmail", data.user?.email || "");
 
         alert("Login Successful!");
         navigate("/dashboard");
@@ -39,7 +36,7 @@ export default function Login() {
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong");
+      alert("Server error");
     } finally {
       setLoading(false);
     }
@@ -59,7 +56,9 @@ export default function Login() {
           body: JSON.stringify({ email: forgotEmail }),
         }
       );
-      const data = await res.json();
+
+      const data = await res.json().catch(() => ({}));
+
       if (res.ok) {
         alert("Check your email for password reset link!");
         setShowForgot(false);

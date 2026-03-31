@@ -20,13 +20,13 @@ export default function Register() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({})); // ✅ FIX
 
       if (res.ok) {
         alert("Registered Successfully! Now login");
         navigate("/login");
       } else {
-        alert(data.message);
+        alert(data.message || "Registration failed"); // ✅ FIX
       }
     } catch (err) {
       console.error(err);

@@ -9,6 +9,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Register />} />
+      <Route path="/register" element={<Register />} /> {/* ✅ FIX */}
       <Route path="/login" element={<Login />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
 

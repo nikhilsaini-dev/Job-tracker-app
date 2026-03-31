@@ -28,7 +28,7 @@ export default function Dashboard() {
     const fetchJobs = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/jobs", {
-          headers: { Authorization: token },
+          headers: { Authorization: `Bearer ${token}` }, // ✅ FIX
         });
         const data = await res.json();
         if (res.ok) setJobs(data);
@@ -47,20 +47,33 @@ export default function Dashboard() {
     try {
       let res, data;
       if (editJobId) {
-        // EDIT
-        res = await fetch(`http://localhost:5000/api/jobs/${editJobId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json", Authorization: token },
-          body: JSON.stringify(formData),
-        });
-        data = await res.json();
-        if (res.ok) setJobs(jobs.map((job) => (job._id === editJobId ? data : job)));
-        setEditJobId(null);
-      } else {
+   res = await fetch(`http://localhost:5000/api/jobs/${editJobId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  });
+
+   data = await res.json();
+  console.log("Update Response:", data); // DEBUG
+
+  if (res.ok) {
+    setJobs((prevJobs) =>
+      prevJobs.map((job) =>
+        job._id === editJobId ? { ...job, ...formData } : job
+      )
+    );
+  }
+
+  setEditJobId(null);
+} else {
+
         // ADD
         res = await fetch("http://localhost:5000/api/jobs", {
           method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: token },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, // ✅ FIX
           body: JSON.stringify(formData),
         });
         data = await res.json();
@@ -78,7 +91,7 @@ export default function Dashboard() {
     try {
       const res = await fetch(`http://localhost:5000/api/jobs/${id}`, {
         method: "DELETE",
-        headers: { Authorization: token },
+        headers: { Authorization:` Bearer ${token}`}, // ✅ FIX
       });
       if (res.ok) setJobs(jobs.filter((job) => job._id !== id));
     } catch (error) {
@@ -88,6 +101,7 @@ export default function Dashboard() {
 
   // EDIT CLICK 
   const handleEdit = (job) => {
+    console.log("Editing job".job_id)
     setEditJobId(job._id);
     setFormData({ company: job.company, role: job.role, status: job.status });
     setShowModal(true);
