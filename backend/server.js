@@ -11,7 +11,11 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin:[ 
+    "http://localhost:5173",
+    "https://job-tracker-app-mjkm.vercel.app"
+
+  ],
   credentials: true
 }));
 
