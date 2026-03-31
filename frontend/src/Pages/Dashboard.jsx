@@ -71,7 +71,7 @@ export default function Dashboard() {
 } else {
 
         // ADD
-        res = await fetch("https://job-tracker-app-wrwz.onrender.com", {
+        res = await fetch("https://job-tracker-app-wrwz.onrender.com/api/jobs", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` }, // ✅ FIX
           body: JSON.stringify(formData),
