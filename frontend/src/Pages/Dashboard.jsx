@@ -27,7 +27,7 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("https://job-tracker-app-wrwz.onrender.com", {
+        const res = await fetch("https://job-tracker-app-wrwz.onrender.com/api/jobs", {
           headers: { Authorization: `Bearer ${token}` }, // ✅ FIX
         });
         const data = await res.json();
