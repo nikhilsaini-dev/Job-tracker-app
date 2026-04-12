@@ -10,17 +10,12 @@ const SECRET = process.env.JWT_SECRET || "mysecretkey";
 
 // ====== Nodemailer transporter (deploy ready) ======
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // TLS
-  auth: {
-    user: process.env.EMAIL_USER, // Gmail App Password user
-    pass: process.env.EMAIL_PASS  // Gmail App Password
-  },
-  tls: {
-    rejectUnauthorized: false // Optional: deploy me TLS safe
+  service: "gmail",
+  auth:{
+    user:process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   }
-});
+})
 
 // ================= REGISTER =================
 router.post("/register", async (req, res) => {
@@ -83,6 +78,8 @@ router.post("/forgot-password", async (req, res) => {
     // Deploy-ready frontend URL
     const link = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
+    console.log("Sending email to:", user.email)
+
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: user.email,
@@ -94,7 +91,6 @@ router.post("/forgot-password", async (req, res) => {
       `
     });
 
-    console.log("RESET LINK:", link); // console test
     res.json({ message: "Reset link sent" });
   } catch (err) {
     console.error(err);
