@@ -198,11 +198,11 @@ export default function Dashboard() {
       )}
 
       {/* Main */}
-      <div className="flex-1 p-6 md:p-10 md:ml-64">
+      <div className="flex-1  pt-20 p-6  md:pt-20 md:p-20 md:ml-64  min-h-screen">
         {/* Top */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <motion.h2
-            className="text-3xl font-bold"
+            className="text-3xl font-bold relative z-10"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
