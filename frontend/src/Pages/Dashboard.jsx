@@ -42,6 +42,15 @@ export default function Dashboard() {
     fetchJobs();
   }, [token]);
 
+  //
+  useEffect(()=>{
+    if(sidebarOpen){
+      document.body.style.overflow="hidden";
+    }else{
+      document.body.style.overflow="auto"
+    }
+  },[sidebarOpen])
+
   // ADD / EDIT JOB 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -189,7 +198,7 @@ export default function Dashboard() {
       )}
 
       {/* Main */}
-      <div className="flex-1 p-6 md:p-10 ml-0 md:ml-23">
+      <div className="flex-1 p-6 md:p-10 md:ml-64">
         {/* Top */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <motion.h2
