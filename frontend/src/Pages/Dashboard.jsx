@@ -198,7 +198,7 @@ export default function Dashboard() {
       )}
 
       {/* Main */}
-      <div className="flex-1  pt-20 p-6  md:pt-20 md:p-20 md:ml-64  min-h-screen">
+      <div className="flex-1  pt-20 p-6  md:pt-20 md:p-20 md:ml-64 ">
         {/* Top */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <motion.h2
@@ -393,3 +393,4 @@ function StatCard({ title, value }) {
     </motion.div>
   );
 }
+
