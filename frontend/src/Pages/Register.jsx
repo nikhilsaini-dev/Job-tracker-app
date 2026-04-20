@@ -1,32 +1,66 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 export default function Register() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("")
+
+  // Email Validation
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
+  //  Password Validation
+  const isValidPassword = (password) => {
+   return /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(password);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await fetch("https://job-tracker-app-wrwz.onrender.com/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    //  Empty check
+    if (!formData.name || !formData.email || !formData.password) {
+      return alert("Please fill all fields");
+    }
 
-      const data = await res.json().catch(() => ({})); // ✅ FIX
+    //  Email check
+    if (!isValidEmail(formData.email)) {
+      return alert("Please enter a valid email");
+    }
+
+    //  Password check
+    if (!isValidPassword(formData.password)) {
+      setError("Password must be 8+ chars with uppercase, lowercase, number & special character")
+      return
+    }else{
+      setError("")
+    }
+
+    try {
+      const res = await fetch(
+        "https://job-tracker-app-wrwz.onrender.com/api/auth/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
         alert("Registered Successfully! Now login");
         navigate("/login");
       } else {
-        alert(data.message || "Registration failed"); // ✅ FIX
+        alert(data.message || "Registration failed");
       }
     } catch (err) {
       console.error(err);
@@ -52,9 +86,7 @@ export default function Register() {
             placeholder="Full Name"
             className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
             value={formData.name}
-            onChange={(e) =>
-              setFormData({ ...formData, name: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             required
           />
 
@@ -69,16 +101,29 @@ export default function Register() {
             required
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            required
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+            />
+
+            {error && (
+              <p className="text-red-500 text-sm mt-1">{error}</p>
+            )}
+            <span
+              className="absolute right-3 top-3 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <HiEyeOff /> : <HiEye />}
+            </span>
+          </div>
+         
 
           <motion.button
             type="submit"

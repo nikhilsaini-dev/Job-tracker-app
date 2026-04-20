@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
+import { HiEye, HiEyeOff } from "react-icons/hi";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -10,17 +11,29 @@ export default function Login() {
   const [showForgot, setShowForgot] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false); // 👈 NEW
+
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) return alert("Please fill all fields");
 
+    if (!isValidEmail(email)) {
+      return alert("Please enter valid email");
+    }
+
     setLoading(true);
     try {
-      const res = await fetch("https://job-tracker-app-wrwz.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://job-tracker-app-wrwz.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data = await res.json().catch(() => ({}));
 
@@ -44,7 +57,11 @@ export default function Login() {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    if (!forgotEmail) return alert("Please enter your registered email");
+    if (!forgotEmail) return alert("Enter email");
+
+    if (!isValidEmail(forgotEmail)) {
+      return alert("Enter valid email");
+    }
 
     setLoading(true);
     try {
@@ -57,17 +74,14 @@ export default function Login() {
         }
       );
 
-      const data = await res.json().catch(() => ({}));
-
       if (res.ok) {
-        alert("Check your email for password reset link!");
+        alert("Check your email!");
         setShowForgot(false);
       } else {
-        alert(data.message || "Failed to send reset link");
+        alert("Failed");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+    } catch {
+      alert("Error");
     } finally {
       setLoading(false);
     }
@@ -78,10 +92,9 @@ export default function Login() {
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
         className="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-md"
       >
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
+        <h2 className="text-3xl font-bold text-center mb-6">
           {!showForgot ? "Login" : "Forgot Password"}
         </h2>
 
@@ -90,78 +103,76 @@ export default function Login() {
             <input
               type="email"
               placeholder="Email"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
+              className="w-full p-3 border rounded-lg"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
             />
 
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              type="submit"
-              className={`w-full bg-gray-900 text-white font-semibold py-3 rounded-lg shadow-lg transition ${
-                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800"
-              }`}
-              disabled={loading}
-            >
+            {/* PASSWORD WITH EYE */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full p-3 border rounded-lg pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <span
+                className="absolute right-3 top-3 cursor-pointer text-gray-600"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <HiEyeOff /> : <HiEye />}
+              </span>
+            </div>
+
+            <button className="w-full bg-gray-900 text-white py-3 rounded-lg">
               {loading ? "Please wait..." : "Login"}
-            </motion.button>
+            </button>
 
             <p
-              className="text-sm text-blue-600 cursor-pointer hover:underline text-right"
+              className="text-sm text-blue-600 text-right cursor-pointer"
               onClick={() => setShowForgot(true)}
             >
               Forgot Password?
             </p>
+
+              <p className="text-gray-800 text-sm text-center mt-6">
+           Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-gray-900 font-semibold hover:underline"
+          >
+            Register
+          </Link>
+        </p>
           </form>
+
+          
+            
+         
+
         ) : (
           <form onSubmit={handleForgotPassword} className="space-y-4">
             <input
               type="email"
               placeholder="Enter your registered email"
-              className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-700 transition"
+              className="w-full p-3 border rounded-lg"
               value={forgotEmail}
               onChange={(e) => setForgotEmail(e.target.value)}
-              required
             />
 
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              type="submit"
-              className={`w-full bg-gray-900 text-white font-semibold py-3 rounded-lg shadow-lg transition ${
-                loading ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800"
-              }`}
-              disabled={loading}
-            >
-              {loading ? "Sending..." : "Send Reset Link"}
-            </motion.button>
+            <button className="w-full bg-gray-900 text-white py-3 rounded-lg">
+              Send Reset Link
+            </button>
 
             <p
-              className="text-sm text-gray-600 cursor-pointer hover:underline text-right"
+              className="text-sm text-gray-600 text-right cursor-pointer"
               onClick={() => setShowForgot(false)}
             >
               Back to Login
             </p>
           </form>
-        )}
-
-        {!showForgot && (
-          <p className="text-gray-600 text-sm text-center mt-6">
-            Don’t have an account?{" "}
-            <Link to="/" className="text-gray-900 font-semibold hover:underline">
-              Register
-            </Link>
-          </p>
         )}
       </motion.div>
     </div>
